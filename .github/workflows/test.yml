@@ -1,15 +1,18 @@
+cat << 'EOF' > .github/workflows/test.yml
 name: test
 on: push
 jobs:
   test:
     runs-on: ubuntu-22.04
-    container: muuuuu2525/ubuntu22.04-ros2
+    container: ryuichiueda/ubuntu22.04-ros2
     steps:
       - uses: actions/checkout@v2
       - name: build and test
+        shell: bash
         run: |
           cp -r ./ /root/ros2_ws/src/mypkg
           cd /root/ros2_ws
           colcon build
-          . install/setup.bash
+          source install/setup.bash
           ./src/mypkg/test/test.bash /root
+EOF
