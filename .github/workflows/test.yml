@@ -1,18 +1,19 @@
-cat << 'EOF' > .github/workflows/test.yml
 name: test
-on: push
+
+[cite_start]on: push    # プッシュしたときに実行 
+
 jobs:
   test:
     runs-on: ubuntu-22.04
-    container: ryuichiueda/ubuntu22.04-ros2
+    [cite_start]container: ryuichiueda/ubuntu22.04-ros2:latest  # 講師用意のROS 2入りコンテナを使用 
+
     steps:
-      - uses: actions/checkout@v2
+      - [cite_start]uses: actions/checkout@v2  # リポジトリをチェックアウト 
+
       - name: build and test
-        shell: bash
         run: |
-          cp -r ./ /root/ros2_ws/src/mypkg
+          # リポジトリの内容をコンテナ内のワークスペースにコピー
+          rsync -av ./ /root/ros2_ws/src/mypkg/
           cd /root/ros2_ws
-          colcon build
-          source install/setup.bash
-          ./src/mypkg/test/test.bash /root
-EOF
+          # テストスクリプトを実行
+          bash -xv ./src/mypkg/test/test.bash /root
